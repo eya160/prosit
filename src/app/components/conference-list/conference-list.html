@@ -1,0 +1,71 @@
+<h2>Liste des conférences à venir</h2>
+
+@if (upcomingConferences.length === 0) {
+
+  <p class="empty-message">
+    Aucune conférence à venir.
+  </p>
+
+} @else {
+
+  <div class="conference-list">
+
+    @for (conference of upcomingConferences; track conference.title) {
+
+      <div class="conference-card">
+
+        <h3>{{ conference.title | uppercase }}</h3>
+
+        <p>
+          <strong>Description :</strong>
+          {{ conference.description }}
+        </p>
+
+        <p>
+          <strong>Date :</strong>
+          {{ conference.date | date:'dd/MM/yyyy' }}
+        </p>
+
+        <p>
+          <strong>Lieu :</strong>
+          {{ conference.place }}
+        </p>
+
+        <p>
+          <strong>Places restantes :</strong>
+          {{ getRemainingPlaces(conference) }}
+        </p>
+
+        @if (getRemainingPlaces(conference) === 0) {
+
+          <button class="btn btn-red">
+            Complet
+          </button>
+
+        } @else if (getRemainingPlaces(conference) < 10) {
+
+          <button class="btn btn-orange">
+            S'inscrire
+          </button>
+
+        } @else {
+
+          <button class="btn btn-green">
+            S'inscrire
+          </button>
+
+        }
+
+      </div>
+
+    } @empty {
+
+      <p class="empty-message">
+        Aucune conférence à venir.
+      </p>
+
+    }
+
+  </div>
+
+}
