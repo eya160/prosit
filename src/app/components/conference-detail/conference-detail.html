@@ -1,0 +1,48 @@
+
+<div class="conference-card">
+  <h1>Détail de la conférence</h1>
+
+  <div class="conference-info">
+    <h2>{{ title() }}</h2>
+
+    <p>
+      <strong>Intervenant :</strong>
+      {{ speaker() }}
+    </p>
+
+    <p>
+      <strong>Date :</strong>
+      {{ date() | date:'dd/MM/yyyy' }}
+    </p>
+
+    <p>
+      <strong>Places disponibles :</strong>
+      {{ placesDisponibles() }}
+    </p>
+
+    <p>
+      <strong>Participants inscrits :</strong>
+      {{ nbParticipants() }}
+    </p>
+  </div>
+
+  <div class="edit-section">
+    <label for="titre">Modifier le titre :</label>
+
+    <input
+      id="titre"
+      type="text"
+      [value]="title()"
+      (input)="modifierTitre($any($event.target).value)"
+      placeholder="Saisir un nouveau titre"
+    />
+  </div>
+
+  @if (placesDisponibles() > 0) {
+    <button class="register-btn" (click)="inscrire()">
+      S'inscrire
+    </button>
+  } @else {
+    <p class="full-message">Complet — aucune place disponible</p>
+  }
+</div>

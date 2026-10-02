@@ -1,0 +1,63 @@
+
+.conference-card {
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 25px;
+  background: #ffffff;
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.12);
+  font-family: Arial, sans-serif;
+}
+
+h1 {
+  text-align: center;
+  color: #263b70;
+}
+
+h2 {
+  color: #2563eb;
+  margin-bottom: 20px;
+}
+
+.conference-info p {
+  margin: 12px 0;
+  font-size: 16px;
+}
+
+.edit-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 25px 0;
+}
+
+.edit-section input {
+  padding: 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  font-size: 15px;
+}
+
+.register-btn {
+  width: 100%;
+  padding: 13px;
+  background: #16a34a;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.register-btn:hover {
+  background: #15803d;
+}
+
+.full-message {
+  padding: 12px;
+  color: #b91c1c;
+  background: #fee2e2;
+  text-align: center;
+  border-radius: 8px;
+  font-weight: bold;
+}
