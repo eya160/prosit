@@ -1,0 +1,15 @@
+nav {
+  display: flex;
+  justify-content: center;
+  gap: 25px;
+  background-color: #e3f2fd;
+  padding: 15px;
+  margin-top: 10px;
+  border-radius: 8px;
+}
+
+a {
+  text-decoration: none;
+  color: #1565c0;
+  font-weight: bold;
+}

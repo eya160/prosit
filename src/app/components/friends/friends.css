@@ -1,0 +1,10 @@
+.friends {
+  background-color: #f0fdf4;
+  border: 1px solid #86efac;
+  border-radius: 10px;
+  padding: 20px;
+}
+
+li {
+  margin-bottom: 8px;
+}
