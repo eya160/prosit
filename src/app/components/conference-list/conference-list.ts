@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { DatePipe, UpperCasePipe } from '@angular/common';
 import { Conference } from '../../models/conference';
 
@@ -10,6 +10,8 @@ import { Conference } from '../../models/conference';
   styleUrl: './conference-list.css'
 })
 export class ConferenceList {
+
+  @Output() conferenceSelected = new EventEmitter<Conference>();
 
   conferences: Conference[] = [
     {
@@ -35,26 +37,10 @@ export class ConferenceList {
       place: 'Sfax',
       maxParticipants: 80,
       nbParticipants: 80
-    },
-    {
-      title: 'Ancienne conférence',
-      description: 'Cette conférence ne doit pas apparaître',
-      date: new Date('2025-01-10'),
-      place: 'Tunis',
-      maxParticipants: 50,
-      nbParticipants: 20
     }
   ];
 
-  get upcomingConferences(): Conference[] {
-    const today = new Date();
-
-    return this.conferences.filter(
-      conference => new Date(conference.date) >= today
-    );
-  }
-
-  getRemainingPlaces(conference: Conference): number {
-    return conference.maxParticipants - conference.nbParticipants;
+  selectConference(conference: Conference): void {
+    this.conferenceSelected.emit(conference);
   }
 }

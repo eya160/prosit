@@ -1,3 +1,13 @@
 <h1>Gestion des conférences</h1>
 
-<app-conference-list></app-conference-list>
+<div class="container">
+
+  <app-conference-list
+    (conferenceSelected)="onConferenceSelected($event)">
+  </app-conference-list>
+
+  <app-conference-detail
+    [conf]="selectedConference">
+  </app-conference-detail>
+
+</div>

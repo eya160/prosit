@@ -1,37 +1,16 @@
-
-import { Component, signal, computed } from '@angular/core';
-import { DatePipe } from '@angular/common';
+import { Component, Input } from '@angular/core';
+import { DatePipe, UpperCasePipe } from '@angular/common';
+import { Conference } from '../../models/conference';
 
 @Component({
   selector: 'app-conference-detail',
   standalone: true,
-  imports: [DatePipe],
+  imports: [DatePipe, UpperCasePipe],
   templateUrl: './conference-detail.html',
   styleUrl: './conference-detail.css'
 })
 export class ConferenceDetailComponent {
 
-  // Données de la conférence avec Signals
-  title = signal('Angular 21 : les nouveautés');
-  speaker = signal('Eya Mabrouk');
-  date = signal(new Date(2026, 9, 15));
-  maxParticipants = signal(100);
-  nbParticipants = signal(75);
+  @Input() conf: Conference | null = null;
 
-  // Calcul automatique des places disponibles
-  placesDisponibles = computed(() =>
-    this.maxParticipants() - this.nbParticipants()
-  );
-
-  // Modifier le titre depuis le champ de saisie
-  modifierTitre(nouveauTitre: string) {
-    this.title.set(nouveauTitre);
-  }
-
-  // Inscription d'un participant
-  inscrire() {
-    if (this.placesDisponibles() > 0) {
-      this.nbParticipants.update(nombre => nombre + 1);
-    }
-  }
 }
