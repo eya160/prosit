@@ -1,105 +1,233 @@
 <h2>{{ conference ? 'Modifier la conférence' : 'Ajouter une conférence' }}</h2>
 
+<!--
+  [formGroup] : Directive Angular qui lie l'objet FormGroup du TypeScript au template HTML.
+  (ngSubmit)  : Événement déclenché lors de la soumission du formulaire.
+-->
 <form [formGroup]="conferenceForm" (ngSubmit)="onSubmit()">
 
-  <!-- Titre -->
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- Titre (FormControl avec Validators)         -->
+  <!-- ═══════════════════════════════════════════ -->
   <div class="form-group">
-    <label for="title">Titre</label>
+    <label for="title">Titre *</label>
+    <!--
+      formControlName : Directive qui lie cet input au FormControl "title" du FormGroup.
+      L'attribut est une chaîne correspondant à la clé utilisée dans le FormGroup.
+    -->
     <input id="title" type="text" formControlName="title" placeholder="Titre de la conférence">
+    <!--
+      Afficher les messages d'erreur quand le champ est invalid ET touché.
+      conferenceForm.get('title') : Accède au FormControl "title" via le FormGroup.
+      ?.invalid : Vérifie si le FormControl a des erreurs de validation.
+      ?.touched : Vérifie si l'utilisateur a interagi avec le champ.
+      ?.hasError('xxx') : Vérifie si une erreur spécifique est présente.
+    -->
     @if (conferenceForm.get('title')?.invalid && conferenceForm.get('title')?.touched) {
-      <div class="error">
-        @if (conferenceForm.get('title')?.hasError('required')) {
-          <span>Le titre est obligatoire.</span>
-        }
-        @if (conferenceForm.get('title')?.hasError('minlength')) {
-          <span>Le titre doit contenir au moins 3 caractères.</span>
-        }
-      </div>
+    <div class="error">
+      @if (conferenceForm.get('title')?.hasError('required')) {
+      <span>⚠️ Le titre est obligatoire.</span>
+      }
+      @if (conferenceForm.get('title')?.hasError('minlength')) {
+      <span>⚠️ Le titre doit contenir au moins 3 caractères.</span>
+      }
+      @if (conferenceForm.get('title')?.hasError('maxlength')) {
+      <span>⚠️ Le titre ne peut pas dépasser 100 caractères.</span>
+      }
+    </div>
     }
   </div>
 
-  <!-- Description -->
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- Description (FormControl + minLength/maxLength) -->
+  <!-- ═══════════════════════════════════════════ -->
   <div class="form-group">
-    <label for="description">Description</label>
+    <label for="description">Description *</label>
     <textarea id="description" formControlName="description" rows="4"
-              placeholder="Description de la conférence"></textarea>
+      placeholder="Description détaillée de la conférence"></textarea>
+    <!-- Compteur de caractères -->
+    <div class="char-count">
+      {{ conferenceForm.get('description')?.value?.length || 0 }} / 500 caractères
+    </div>
     @if (conferenceForm.get('description')?.invalid && conferenceForm.get('description')?.touched) {
-      <div class="error">
-        @if (conferenceForm.get('description')?.hasError('required')) {
-          <span>La description est obligatoire.</span>
-        }
-        @if (conferenceForm.get('description')?.hasError('minlength')) {
-          <span>La description doit contenir au moins 10 caractères.</span>
-        }
-      </div>
+    <div class="error">
+      @if (conferenceForm.get('description')?.hasError('required')) {
+      <span>⚠️ La description est obligatoire.</span>
+      }
+      @if (conferenceForm.get('description')?.hasError('minlength')) {
+      <span>⚠️ La description doit contenir au moins 10 caractères.</span>
+      }
+      @if (conferenceForm.get('description')?.hasError('maxlength')) {
+      <span>⚠️ La description ne peut pas dépasser 500 caractères.</span>
+      }
+    </div>
     }
   </div>
 
-  <!-- Date -->
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- Catégorie (FormControl + required)          -->
+  <!-- ═══════════════════════════════════════════ -->
   <div class="form-group">
-    <label for="date">Date</label>
+    <label for="category">Catégorie *</label>
+    <select id="category" formControlName="category">
+      <option value="" disabled>-- Sélectionner une catégorie --</option>
+      @for (cat of categories; track cat) {
+      <option [value]="cat">{{ cat }}</option>
+      }
+    </select>
+    @if (conferenceForm.get('category')?.invalid && conferenceForm.get('category')?.touched) {
+    <div class="error">
+      <span>⚠️ La catégorie est obligatoire.</span>
+    </div>
+    }
+  </div>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- Date (FormControl + futureDateValidator)    -->
+  <!-- ═══════════════════════════════════════════ -->
+  <div class="form-group">
+    <label for="date">Date *</label>
     <input id="date" type="date" formControlName="date">
     @if (conferenceForm.get('date')?.invalid && conferenceForm.get('date')?.touched) {
-      <div class="error">
-        <span>La date est obligatoire.</span>
-      </div>
+    <div class="error">
+      @if (conferenceForm.get('date')?.hasError('required')) {
+      <span>⚠️ La date est obligatoire.</span>
+      }
+      @if (conferenceForm.get('date')?.hasError('futureDate')) {
+      <span>⚠️ La date doit être dans le futur.</span>
+      }
+    </div>
     }
   </div>
 
-  <!-- Lieu -->
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- Lieu (FormControl + required + minLength)   -->
+  <!-- ═══════════════════════════════════════════ -->
   <div class="form-group">
-    <label for="place">Lieu</label>
-    <input id="place" type="text" formControlName="place" placeholder="Lieu de la conférence">
+    <label for="place">Lieu *</label>
+    <input id="place" type="text" formControlName="place" placeholder="Ville ou adresse de la conférence">
     @if (conferenceForm.get('place')?.invalid && conferenceForm.get('place')?.touched) {
-      <div class="error">
-        <span>Le lieu est obligatoire.</span>
-      </div>
+    <div class="error">
+      @if (conferenceForm.get('place')?.hasError('required')) {
+      <span>⚠️ Le lieu est obligatoire.</span>
+      }
+      @if (conferenceForm.get('place')?.hasError('minlength')) {
+      <span>⚠️ Le lieu doit contenir au moins 2 caractères.</span>
+      }
+    </div>
     }
   </div>
 
-  <!-- Nombre maximum de participants -->
-  <div class="form-group">
-    <label for="maxParticipants">Nombre maximum de participants</label>
-    <input id="maxParticipants" type="number" formControlName="maxParticipants">
-    @if (conferenceForm.get('maxParticipants')?.invalid && conferenceForm.get('maxParticipants')?.touched) {
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- Participants (2 FormControl côte à côte)    -->
+  <!-- ═══════════════════════════════════════════ -->
+  <div class="form-row">
+    <div class="form-group half">
+      <label for="maxParticipants">Max participants *</label>
+      <input id="maxParticipants" type="number" formControlName="maxParticipants">
+      @if (conferenceForm.get('maxParticipants')?.invalid && conferenceForm.get('maxParticipants')?.touched) {
       <div class="error">
         @if (conferenceForm.get('maxParticipants')?.hasError('required')) {
-          <span>Ce champ est obligatoire.</span>
+        <span>⚠️ Ce champ est obligatoire.</span>
         }
         @if (conferenceForm.get('maxParticipants')?.hasError('min')) {
-          <span>La valeur minimum est 1.</span>
+        <span>⚠️ La valeur minimum est 1.</span>
+        }
+        @if (conferenceForm.get('maxParticipants')?.hasError('max')) {
+        <span>⚠️ La valeur maximum est 10 000.</span>
         }
       </div>
-    }
-  </div>
+      }
+    </div>
 
-  <!-- Nombre de participants -->
-  <div class="form-group">
-    <label for="nbParticipants">Nombre de participants actuels</label>
-    <input id="nbParticipants" type="number" formControlName="nbParticipants">
-    @if (conferenceForm.get('nbParticipants')?.invalid && conferenceForm.get('nbParticipants')?.touched) {
+    <div class="form-group half">
+      <label for="nbParticipants">Participants actuels *</label>
+      <input id="nbParticipants" type="number" formControlName="nbParticipants">
+      @if (conferenceForm.get('nbParticipants')?.invalid && conferenceForm.get('nbParticipants')?.touched) {
       <div class="error">
         @if (conferenceForm.get('nbParticipants')?.hasError('required')) {
-          <span>Ce champ est obligatoire.</span>
+        <span>⚠️ Ce champ est obligatoire.</span>
         }
         @if (conferenceForm.get('nbParticipants')?.hasError('min')) {
-          <span>La valeur minimum est 0.</span>
+        <span>⚠️ La valeur minimum est 0.</span>
         }
       </div>
-    }
+      }
+    </div>
   </div>
 
-  <!-- État du formulaire -->
-  <div class="form-status">
+  <!-- Erreur cross-field : nbParticipants > maxParticipants -->
+  <!--
+    conferenceForm.hasError('participantsExceeded') :
+    Accède à l'erreur du validateur cross-field appliqué au FormGroup.
+    Ce validateur (participantsValidator) vérifie la cohérence entre deux champs.
+  -->
+  @if (conferenceForm.hasError('participantsExceeded')) {
+  <div class="error cross-field-error">
+    <span>⚠️ Le nombre de participants actuels ne peut pas dépasser le maximum autorisé.</span>
+  </div>
+  }
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- État du formulaire (feedback visuel)        -->
+  <!-- ═══════════════════════════════════════════ -->
+  <div class="form-status" [class.valid]="conferenceForm.valid" [class.invalid]="conferenceForm.invalid">
     <p>
       <strong>État du formulaire :</strong>
-      {{ conferenceForm.valid ? '✅ Valide' : '❌ Invalide' }}
+      {{ conferenceForm.valid ? '✅ Valide — Prêt à soumettre' : '❌ Invalide — Corrigez les erreurs ci-dessus' }}
     </p>
   </div>
 
-  <!-- Bouton Submit -->
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- Bouton Submit (désactivé si formulaire invalide) -->
+  <!-- ═══════════════════════════════════════════ -->
+  <!--
+    [disabled]="conferenceForm.invalid" :
+    Le bouton est automatiquement désactivé tant que le FormGroup est invalide.
+    Angular évalue conferenceForm.valid / conferenceForm.invalid en temps réel.
+  -->
   <button type="submit" [disabled]="conferenceForm.invalid" class="btn-submit">
-    {{ conference ? 'Enregistrer les modifications' : 'Ajouter la conférence' }}
+    {{ conference ? '💾 Enregistrer les modifications' : '➕ Ajouter la conférence' }}
   </button>
 
 </form>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- Récapitulatif des données soumises         -->
+<!-- (Récupération des informations dans le TS) -->
+<!-- ═══════════════════════════════════════════ -->
+@if (submittedData) {
+<div class="submitted-summary">
+  <h3>📋 Récapitulatif de la conférence soumise</h3>
+  <table>
+    <tr>
+      <td><strong>Titre</strong></td>
+      <td>{{ submittedData.title }}</td>
+    </tr>
+    <tr>
+      <td><strong>Description</strong></td>
+      <td>{{ submittedData.description }}</td>
+    </tr>
+    <tr>
+      <td><strong>Catégorie</strong></td>
+      <td>{{ submittedData.category }}</td>
+    </tr>
+    <tr>
+      <td><strong>Date</strong></td>
+      <td>{{ submittedData.date.toLocaleDateString('fr-FR') }}</td>
+    </tr>
+    <tr>
+      <td><strong>Lieu</strong></td>
+      <td>{{ submittedData.place }}</td>
+    </tr>
+    <tr>
+      <td><strong>Max participants</strong></td>
+      <td>{{ submittedData.maxParticipants }}</td>
+    </tr>
+    <tr>
+      <td><strong>Participants actuels</strong></td>
+      <td>{{ submittedData.nbParticipants }}</td>
+    </tr>
+  </table>
+</div>
+}
