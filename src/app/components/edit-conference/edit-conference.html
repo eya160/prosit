@@ -1,0 +1,9 @@
+<div class="page-container">
+    @if (conference) {
+    <app-conference-form [conference]="conference" (formSubmit)="onFormSubmit($event)">
+    </app-conference-form>
+    }
+    <div class="back-link">
+        <a routerLink="/">← Retour à la liste</a>
+    </div>
+</div>

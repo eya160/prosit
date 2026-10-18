@@ -19,4 +19,5 @@ describe('ConferenceList', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+  
 });

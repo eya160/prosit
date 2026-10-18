@@ -1,0 +1,105 @@
+<h2>{{ conference ? 'Modifier la conférence' : 'Ajouter une conférence' }}</h2>
+
+<form [formGroup]="conferenceForm" (ngSubmit)="onSubmit()">
+
+  <!-- Titre -->
+  <div class="form-group">
+    <label for="title">Titre</label>
+    <input id="title" type="text" formControlName="title" placeholder="Titre de la conférence">
+    @if (conferenceForm.get('title')?.invalid && conferenceForm.get('title')?.touched) {
+      <div class="error">
+        @if (conferenceForm.get('title')?.hasError('required')) {
+          <span>Le titre est obligatoire.</span>
+        }
+        @if (conferenceForm.get('title')?.hasError('minlength')) {
+          <span>Le titre doit contenir au moins 3 caractères.</span>
+        }
+      </div>
+    }
+  </div>
+
+  <!-- Description -->
+  <div class="form-group">
+    <label for="description">Description</label>
+    <textarea id="description" formControlName="description" rows="4"
+              placeholder="Description de la conférence"></textarea>
+    @if (conferenceForm.get('description')?.invalid && conferenceForm.get('description')?.touched) {
+      <div class="error">
+        @if (conferenceForm.get('description')?.hasError('required')) {
+          <span>La description est obligatoire.</span>
+        }
+        @if (conferenceForm.get('description')?.hasError('minlength')) {
+          <span>La description doit contenir au moins 10 caractères.</span>
+        }
+      </div>
+    }
+  </div>
+
+  <!-- Date -->
+  <div class="form-group">
+    <label for="date">Date</label>
+    <input id="date" type="date" formControlName="date">
+    @if (conferenceForm.get('date')?.invalid && conferenceForm.get('date')?.touched) {
+      <div class="error">
+        <span>La date est obligatoire.</span>
+      </div>
+    }
+  </div>
+
+  <!-- Lieu -->
+  <div class="form-group">
+    <label for="place">Lieu</label>
+    <input id="place" type="text" formControlName="place" placeholder="Lieu de la conférence">
+    @if (conferenceForm.get('place')?.invalid && conferenceForm.get('place')?.touched) {
+      <div class="error">
+        <span>Le lieu est obligatoire.</span>
+      </div>
+    }
+  </div>
+
+  <!-- Nombre maximum de participants -->
+  <div class="form-group">
+    <label for="maxParticipants">Nombre maximum de participants</label>
+    <input id="maxParticipants" type="number" formControlName="maxParticipants">
+    @if (conferenceForm.get('maxParticipants')?.invalid && conferenceForm.get('maxParticipants')?.touched) {
+      <div class="error">
+        @if (conferenceForm.get('maxParticipants')?.hasError('required')) {
+          <span>Ce champ est obligatoire.</span>
+        }
+        @if (conferenceForm.get('maxParticipants')?.hasError('min')) {
+          <span>La valeur minimum est 1.</span>
+        }
+      </div>
+    }
+  </div>
+
+  <!-- Nombre de participants -->
+  <div class="form-group">
+    <label for="nbParticipants">Nombre de participants actuels</label>
+    <input id="nbParticipants" type="number" formControlName="nbParticipants">
+    @if (conferenceForm.get('nbParticipants')?.invalid && conferenceForm.get('nbParticipants')?.touched) {
+      <div class="error">
+        @if (conferenceForm.get('nbParticipants')?.hasError('required')) {
+          <span>Ce champ est obligatoire.</span>
+        }
+        @if (conferenceForm.get('nbParticipants')?.hasError('min')) {
+          <span>La valeur minimum est 0.</span>
+        }
+      </div>
+    }
+  </div>
+
+  <!-- État du formulaire -->
+  <div class="form-status">
+    <p>
+      <strong>État du formulaire :</strong>
+      {{ conferenceForm.valid ? '✅ Valide' : '❌ Invalide' }}
+    </p>
+  </div>
+
+  <!-- Bouton Submit -->
+  <button type="submit" [disabled]="conferenceForm.invalid" class="btn-submit">
+    {{ conference ? 'Enregistrer les modifications' : 'Ajouter la conférence' }}
+  </button>
+
+</form>

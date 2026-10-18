@@ -2,35 +2,42 @@
 
 <div class="conference-list">
 
-  @for (conference of conferences; track conference.title) {
+  @for (conference of conferences; track conference.id) {
 
-    <div class="conference-card">
+  <div class="conference-card">
 
-      <h3>{{ conference.title | uppercase }}</h3>
+    <h3>{{ conference.title | uppercase }}</h3>
 
-      <p>
-        {{ conference.description }}
-      </p>
+    <p>
+      {{ conference.description }}
+    </p>
 
-      <p>
-        <strong>Date :</strong>
-        {{ conference.date | date:'dd/MM/yyyy' }}
-      </p>
+    <p>
+      <strong>Date :</strong>
+      {{ conference.date | date:'dd/MM/yyyy' }}
+    </p>
 
-      <p>
-        <strong>Lieu :</strong>
-        {{ conference.place }}
-      </p>
+    <p>
+      <strong>Lieu :</strong>
+      {{ conference.place }}
+    </p>
 
-      <button (click)="selectConference(conference)">
-        Voir les détails
-      </button>
+    <p>
+      <strong>Participants :</strong>
+      {{ conference.nbParticipants }} / {{ conference.maxParticipants }}
+    </p>
 
+    <div class="card-actions">
+      <a [routerLink]="['/edit', conference.id]" class="btn btn-orange">
+        ✏️ Modifier
+      </a>
     </div>
+
+  </div>
 
   } @empty {
 
-    <p>Aucune conférence disponible.</p>
+  <p class="empty-message">Aucune conférence disponible.</p>
 
   }
 

@@ -1,13 +1,8 @@
 <h1>Gestion des conférences</h1>
 
-<div class="container">
+<nav class="app-nav">
+  <a routerLink="/">📋 Liste des conférences</a>
+  <a routerLink="/add">➕ Ajouter une conférence</a>
+</nav>
 
-  <app-conference-list
-    (conferenceSelected)="onConferenceSelected($event)">
-  </app-conference-list>
-
-  <app-conference-detail
-    [conf]="selectedConference">
-  </app-conference-detail>
-
-</div>
+<router-outlet></router-outlet>

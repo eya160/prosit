@@ -25,22 +25,31 @@ h2 {
   margin: 8px 0;
 }
 
+.card-actions {
+  margin-top: 15px;
+}
+
 .btn {
-  margin-top: 10px;
-  padding: 10px 20px;
+  display: inline-block;
+  padding: 8px 16px;
   border: none;
   border-radius: 5px;
   color: white;
   cursor: pointer;
   font-size: 14px;
+  text-decoration: none;
+}
+
+.btn-orange {
+  background-color: #e67e22;
+}
+
+.btn-orange:hover {
+  background-color: #d35400;
 }
 
 .btn-green {
   background-color: green;
-}
-
-.btn-orange {
-  background-color: orange;
 }
 
 .btn-red {
